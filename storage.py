@@ -26,29 +26,45 @@ cleanup = lambda s: s[:-1] if s[-1] == '\n' else s
 #                b = True
 #            c =+ 1
 
-def writeindex(s):
-	#WORKS. TESTED 02/09/09
-	b = 0
-	c = 0
-	with open(GLOBALSTORAGE + 'assindex.txt') as f:
-		a = f.readlines()
-        while b == 0:
-		#IF IT IS ALREADY FOUND
-		if readnthline(a, c).split(',')[1] == s:
-			b = 2
-		#FIND FIRST BLANK LINE
-		elif len(a) != c:
-			b = 1
-		c += 1
-	if b == 2:
-		return c
-	with open(GLOBALSTORAGE + 'assindex.txt',  'a') as f:
-		if a[-1][-2] == '\r\n':
-			f.write(str(c) +  ',' +  s)
-		elif a[-1][-2] != '\r\n':
-			f.write('\n' + str(c + 1) +  ',' +  s)
-	#RETURN INDEX NUMBER
-	return c
+#def writeindex(s):
+#	#WORKS. TESTED 02/09/09
+#	b = 0
+#	c = 0
+#	with open(GLOBALSTORAGE + 'assindex.txt') as f:
+#		a = f.readlines()
+#        while b == 0:
+#		#IF IT IS ALREADY FOUND
+#		if readnthline(a, c).split(',')[1] == s:
+#			b = 2
+#		#FIND FIRST BLANK LINE
+#		elif len(a) != c:
+#			b = 1
+#		c += 1
+#	if b == 2:
+#		return c
+#	with open(GLOBALSTORAGE + 'assindex.txt',  'a') as f:
+#		if a[-1][-2] == '\r\n':
+#			f.write(str(c) +  ',' +  s)
+#		elif a[-1][-2] != '\r\n':
+#			f.write('\n' + str(c + 1) +  ',' +  s)
+#	#RETURN INDEX NUMBER
+#	return c
+
+def writeindex(strIndex):
+	
+	fileIndex = openassindex('a+')
+	listIndexCont = fileIndex.readlines()
+	intLastLine = len(listIndexCont)
+	
+	if listIndexCont[-1][-1] in ('\r', '\n'):
+		fileIndex.write(str(intLastLine) + ',' + strIndex)
+	else:
+		fileIndex.write('\n' + str(intLastLine) + ',' + strIndex)
+	
+	fileIndex.seek(0)
+	fileIndex.close()
+	
+	
 
 def writeass(s, n):
 	#WORKS. TESTED 02/09/09
@@ -366,7 +382,7 @@ def pollassdic(s):
 #        res1 = False
 
 def openassindex(*args):
-	if 'w' in args:
+	if 'w' in args or 'a' in args:
 		global globintIndexWriteCount
 		globintIndexWriteCount += 1
 	fileAssIndex = open(GLOBALSTORAGE + 'assindex.txt',  *args)
@@ -375,7 +391,7 @@ def openassindex(*args):
 	return fileAssIndex
 
 def openassdic(*args):
-	if 'w' in args:
+	if 'w' in args or 'a' in args:
 		global globintDicWriteCount
 		globintDicWriteCount += 1
 	fileAssDic = open(GLOBALSTORAGE + 'assdic.txt', *args)

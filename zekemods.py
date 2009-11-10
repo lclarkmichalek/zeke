@@ -34,14 +34,14 @@ def declareglobs():
     global globintDicOpenCount
     globintDicOpenCount = 0
     
-    global globintAssOpenCount
-    globintAssOpenCount = 0
+    global globintIndexOpenCount
+    globintIndexOpenCount = 0
     
     global globintDicWriteCount
     globintDicWriteCount = 0
     
-    global globintAssWriteCount
-    globintAssWriteCount = 0
+    global globintIndexWriteCount
+    globintIndexWriteCount = 0
     
     
 def firstwords(s, n):
