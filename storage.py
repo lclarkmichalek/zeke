@@ -171,91 +171,122 @@ def checkass(intIndex1, intIndex2):
 		return False
 
 
-def getass(s, n):
-	'''Checks if a string is already associted with another. Sytax: checkass(string1,string2)
-	Return values:
-	0 - strings are accosiated;
-	1 - 1st string not found;
-	2 - 2nd string not found;
-	3 - strings found, but not accosiated;	
-	4 - strings accosiated but there is database coruption.
-	5 - both strings not found
-	6 - one or more input = \"\"'''
-	#WORKS. TESTED FOR ALL RETURN CODES APART FROM 4 01/09/09
-	#APPARENTLY DOSN'T 08/11/09
-	#Fix, 09/11/09. If either input = '' then return 3
-	#What about when both strings not found? return 5? 09/11/09
-	if '' in [s, n]:
-		return 6
-	s = ''
-	r = 0
-	b = False
-	c = 0
-	c2 = 0
-	arevised = []
-	f = open(GLOBALSTORAGE + 'assindex.txt')
-	a = f.readlines()
-	f.seek(0)
-	for ent in a:
-		arevised.append(cleanup(ent.split(',')))
-	a = []
-	while len(arevised) != c:
-		a.append([])
-		while len(arevised[c]) != c2:
-			a[c].append(cleanup(arevised[c][c2]))
-			c2 += 1
-		c2 = 0
-		c += 1
-	c = 0
-	while len(a) != c and not b:
-		if s == a[c][1]:
-			b = True
-			d1 = int(a[c][0])
-		c += 1
-	if b == False:
-		f.close
-		bolFirst = False
-        #Set false, s was not found, so we have some record, and can check for the second
+def getass(intIndex):
+	#Re-writen to be simpler, and nicer. 10/11/09
+	
+	fileDic = openassdic()
+	listDicCont = fileDic.readlines()
+	fileDic.seek(0)
+	fileDic.close()
+	
+	listDicContClean = []
+	for obCount in listDicCont:
+		listDicContClean.append(obCount.split(','))
+	listDicCont = []
+	
+	intCount1 = 0
+	intCount2 = 0
+	while len(listDicContClean) != intCount1:
+		listDicCont.append([])
+		while len(listDicContClean[intCount1]) != intCount2:
+			listDicCont[intCount1].append(cleanup(listDicContClean[intCount1][intCount2]))
+			intCount2 += 1
+		intCount2 = 0
+		intCount1 += 1
+	
+	try:
+		listReturn = listDicCont[intIndex][1:]
+	except:
+		listReturn = False
 	else:
-		bolFirst = True
-	c = 0
-	b = False
-	while not len(a) == c and not b:
-		if n == a[c][1]:
-			b = True
-			d2 = int(a[c][0])
-		c += 1
-	f.close
-	if False in (b, bolFirst):
-		return 2
-		#Was s found? no? then return 2
-	elif not b and not bolFirst:
-		return 5
-		#otherwise, it's a general faliure, as indicated by returning 5
-	f = open(GLOBALSTORAGE + 'assdic.txt')
-	c = 0
-	b = False
-	a = f.readlines()
-	for ent in a:
-		cleanup(ent)
-	list = readnthline(a, d1).split(',')
-	if d2 in list:
-		b = True
-	if not b:
-		r = 1
-	c = 0
-	b = False
-	list = readnthline(a, d2).split(',')
-	if d1 in list:
-		b = True
-	if not b:
-		r += 1
-	if r == 0:
-		return 0
-	elif r == 1:
-		return 4
-	elif r == 2:
-		return 3
+		listReturn = listDicCont[intIndex][1:]
+	return listReturn
+
+#def getass(s, n):
+#	'''Checks if a string is already associted with another. Sytax: checkass(string1,string2)
+#	Return values:
+#	0 - strings are accosiated;
+#	1 - 1st string not found;
+#	2 - 2nd string not found;
+#	3 - strings found, but not accosiated;	
+#	4 - strings accosiated but there is database coruption.
+#	5 - both strings not found
+#	6 - one or more input = \"\"'''
+#	#WORKS. TESTED FOR ALL RETURN CODES APART FROM 4 01/09/09
+#	#APPARENTLY DOSN'T 08/11/09
+#	#Fix, 09/11/09. If either input = '' then return 3
+#	#What about when both strings not found? return 5? 09/11/09
+#	if '' in [s, n]:
+#		return 6
+#	s = ''
+#	r = 0
+#	b = False
+#	c = 0
+#	c2 = 0
+#	arevised = []
+#	f = open(GLOBALSTORAGE + 'assindex.txt')
+#	a = f.readlines()
+#	f.seek(0)
+#	for ent in a:
+#		arevised.append(cleanup(ent.split(',')))
+#	a = []
+#	while len(arevised) != c:
+#		a.append([])
+#		while len(arevised[c]) != c2:
+#			a[c].append(cleanup(arevised[c][c2]))
+#			c2 += 1
+#		c2 = 0
+#		c += 1
+#	c = 0
+#	while len(a) != c and not b:
+#		if s == a[c][1]:
+#			b = True
+#			d1 = int(a[c][0])
+#		c += 1
+#	if b == False:
+#		f.close
+#		bolFirst = False
+#        #Set false, s was not found, so we have some record, and can check for the second
+#	else:
+#		bolFirst = True
+#	c = 0
+#	b = False
+#	while not len(a) == c and not b:
+#		if n == a[c][1]:
+#			b = True
+#			d2 = int(a[c][0])
+#		c += 1
+#	f.close
+#	if False in (b, bolFirst):
+#		return 2
+#		#Was s found? no? then return 2
+#	elif not b and not bolFirst:
+#		return 5
+#		#otherwise, it's a general faliure, as indicated by returning 5
+#	f = open(GLOBALSTORAGE + 'assdic.txt')
+#	c = 0
+#	b = False
+#	a = f.readlines()
+#	for ent in a:
+#		cleanup(ent)
+#	list = readnthline(a, d1).split(',')
+#	if d2 in list:
+#		b = True
+#	if not b:
+#		r = 1
+#	c = 0
+#	b = False
+#	list = readnthline(a, d2).split(',')
+#	if d1 in list:
+#		b = True
+#	if not b:
+#		r += 1
+#	if r == 0:
+#		return 0
+#	elif r == 1:
+#		return 4
+#	elif r == 2:
+#		return 3
 
 checkindex = lambda intstrInput: True if not getindex(intstrInput) else False
 

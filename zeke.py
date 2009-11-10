@@ -9,8 +9,7 @@ from sys import *
 path = [GLOBALLIB] + path
 
 #Debug area
-if checkass(5, 4):
-	print 'success'
+print getass(5)
 
 c = 0
 c1 = 0
