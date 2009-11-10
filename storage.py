@@ -26,20 +26,20 @@ cleanup = lambda s: s[:-1] if s[-1] == '\n' else s
 #                b = True
 #            c =+ 1
 
-def writeassindex(s):
+def writeindex(s):
 	#WORKS. TESTED 02/09/09
 	b = 0
-	c = -0
+	c = 0
 	with open(GLOBALSTORAGE + 'assindex.txt') as f:
 		a = f.readlines()
         while b == 0:
-		c += 1
 		#IF IT IS ALREADY FOUND
 		if readnthline(a, c).split(',')[1] == s:
 			b = 2
 		#FIND FIRST BLANK LINE
-		elif len(a) == c + 1:
+		elif len(a) != c:
 			b = 1
+		c += 1
 	if b == 2:
 		return c
 	with open(GLOBALSTORAGE + 'assindex.txt',  'a') as f:
@@ -50,22 +50,22 @@ def writeassindex(s):
 	#RETURN INDEX NUMBER
 	return c
 
-def writeassdic(s, n):
+def writeass(s, n):
 	#WORKS. TESTED 02/09/09
 	#Does not fucking work you twat 09/11/09
 	ni = int(n)
 	si = int(s)
 	tf = TemporaryFile(mode='a+')
-	f = open(GLOBALSTORAGE + 'assdic.txt',  'r')
+	f = openassdic('r')
 	a = f.readlines()
-	c = -1
+	c = 0
 	b = 0
 	while b == 0:
-		c += 1
 		if int(readnthline(a, c).split(',')[0]) == s:
 			b = 1
 		elif readnthline(a, c).split(',')[0] == '':
 			b = 2
+		c += 1
 	if b == 1:
 		f.seek(0)
 		strng = f.readlines()
@@ -132,9 +132,10 @@ def writeassdic(s, n):
 		tf.close
 
 
+checkass = lambda s, n: True if getass(s, n) == 0 else False
 
 
-def checkass(s, n):
+def getass(s, n):
 	'''Checks if a string is already associted with another. Sytax: checkass(string1,string2)
 	Return values:
 	0 - strings are accosiated;
@@ -156,6 +157,8 @@ def checkass(s, n):
 	c = 0
 	f = open(GLOBALSTORAGE + 'assindex.txt')
 	a = f.readlines()
+	for ent in a:
+		arevised.append(cleanup(ent.split(',')))
 	for ent in a:
 	    cleanup(ent)
 	f.seek(0)
