@@ -29,7 +29,21 @@ def declareglobs():
     #GLOBAL INSTALL STORAGE PATH
     global GLOBALSTORAGE
     GLOBALSTORAGE = '/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/'
-
+    
+    #No need to change these
+    global globintDicOpenCount
+    globintDicOpenCount = 0
+    
+    global globintAssOpenCount
+    globintAssOpenCount = 0
+    
+    global globintDicWriteCount
+    globintDicWriteCount = 0
+    
+    global globintAssWriteCount
+    globintAssWriteCount = 0
+    
+    
 def firstwords(s, n):
     '''
     Get's the first words of a string. Syntax: firstwords(string, number of words)

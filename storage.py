@@ -132,7 +132,43 @@ def writeass(s, n):
 		tf.close
 
 
-checkass = lambda s, n: True if getass(s, n) == 0 else False
+def checkass(intIndex1, intIndex2):
+	
+	strIndex1 = str(intIndex1)
+	strIndex2 = str(intIndex2)
+	
+	fileDic = openassdic()
+	listDicCont = fileDic.readlines()
+	fileDic.seek(0)
+	fileDic.close()
+	
+	listDicContClean = []
+	for obCount in listDicCont:
+		listDicContClean.append(obCount.split(','))
+	listDicCont = []
+	
+	intCount1 = 0
+	intCount2 = 0
+	while len(listDicContClean) != intCount1:
+		listDicCont.append([])
+		while len(listDicContClean[intCount1]) != intCount2:
+			listDicCont[intCount1].append(cleanup(listDicContClean[intCount1][intCount2]))
+			intCount2 += 1
+		intCount2 = 0
+		intCount1 += 1
+	
+	bolResult1 = False
+	if strIndex2 in listDicCont[intIndex1][1:]:
+		bolResult1 = True
+	
+	bolResult2 = False
+	if strIndex1 in listDicCont[intIndex2][1:]:
+		bolResult2 = True
+	
+	if bolResult1 and bolResult2:
+		return True
+	else:
+		return False
 
 
 def getass(s, n):
@@ -155,17 +191,26 @@ def getass(s, n):
 	r = 0
 	b = False
 	c = 0
+	c2 = 0
+	arevised = []
 	f = open(GLOBALSTORAGE + 'assindex.txt')
 	a = f.readlines()
+	f.seek(0)
 	for ent in a:
 		arevised.append(cleanup(ent.split(',')))
-	for ent in a:
-	    cleanup(ent)
-	f.seek(0)
+	a = []
+	while len(arevised) != c:
+		a.append([])
+		while len(arevised[c]) != c2:
+			a[c].append(cleanup(arevised[c][c2]))
+			c2 += 1
+		c2 = 0
+		c += 1
+	c = 0
 	while len(a) != c and not b:
-		if s == readnthline(a, c).split(',')[1]:
+		if s == a[c][1]:
 			b = True
-			d1 = int(readnthline(a, c).split(',')[0])
+			d1 = int(a[c][0])
 		c += 1
 	if b == False:
 		f.close
@@ -176,9 +221,9 @@ def getass(s, n):
 	c = 0
 	b = False
 	while not len(a) == c and not b:
-		if n == readnthline(a, c).split(',')[1]:
+		if n == a[c][1]:
 			b = True
-			d2 = int(readnthline(a, c).split(',')[0])
+			d2 = int(a[c][0])
 		c += 1
 	f.close
 	if False in (b, bolFirst):
