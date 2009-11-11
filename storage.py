@@ -22,6 +22,8 @@ def writeindex(strIndex):
 	
 	fileIndex.seek(0)
 	fileIndex.close()
+	
+	return intLastLine
 
 
 def writeass(intIndex1, intIndex2):
@@ -269,7 +271,12 @@ def getass(intIndex):
 		listReturn = False
 	else:
 		listReturn = listDicCont[intIndex][1:]
-	return listReturn
+	
+	listintReturn = []
+	for x in listReturn:
+		listintReturn.append(int(x))
+	
+	return listintReturn
 
 
 checkindex = lambda intstrInput: True if not getindex(intstrInput) else False

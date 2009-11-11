@@ -27,7 +27,7 @@ wdtypev = 'verb'
 queswds = ['who', 'how', 'why', 'where', 'when', 'what', 'which']
 cleanup = lambda s: s[:-1] if s[-1] == '\n' else s
 while c1 < 20:
-	a = raw_input('I am thinking of an object. Ask me a yes/no question about itw. ')
+	a = raw_input('I am thinking of an object. Ask me a yes/no question about it. ')
 	if a == '':
 		exit('Next time, enter something')
 	a = rmpunc(a)[0]
@@ -41,22 +41,45 @@ while c1 < 20:
 		c2 = 0
 		asses = []
 		tm = raw_input('What word would you like the acociations for? ')
-		tmout = pollassdic(pollassindex(tm))
-		tmoutnew = []
-        	for ent in tmout:
-			asses.append(pollassindexrev(int(cleanup(str(ent)))))
-		print '%s is asociated with:' % tm
-		for ent in asses:
-			print ent
+		tmindex = getindex(tm)
+		tmasses = getass(tmindex)
+		print '%s is assosiated with:' % tm
+		for x in tmasses:
+			print getindex(x)
 	elif len(a.split(' ')) < 3:
 		exit('A question you numscull')
 	elif lastletter(a) and ass1 == '':
 		ass1 = lastwords(a, 1)[0]
 	elif not lastletter(a) and ass1 != '':
 		ass2 = lastwords(a, 1)[0]
-	if not '' in (ass1, ass2) and checkass(ass1, ass2) in [1, 2, 3, 5]:
-        #If one or more is found not to exist, or they aint accosiated, do it through the ubiquotus writeassindex func
-		writeassdic(writeassindex(ass1), writeassindex(ass2))
+	if not '' in (ass1, ass2):
+		if checkindex(ass1) and checkindex(ass2):
+			
+			if not checkass(getindex(ass1), getindex(ass2)):
+				writeass(getindex(ass1), getindex(ass2))
+			
+		elif not checkindex(ass1) and not checkindex(ass2):
+			
+			writeindex(ass1)
+			writeindex(ass2)
+			
+			if not checkass(getindex(ass1), getindex(ass2)):
+				writeass(getindex(ass1), getindex(ass2))
+				
+		elif not checkindex(ass1):
+			
+			writeindex(ass1)
+			
+			if not checkass(getindex(ass1), getindex(ass2)):
+				writeass(getindex(ass1), getindex(ass2))
+			
+		elif not checkindex(ass2):
+			
+			writeindex(ass2)
+			
+			if not checkass(getindex(ass1), getindex(ass2)):
+				writeass(getindex(ass1), getindex(ass2))
+		
 		ass1, ass2 = '', ''
 	if not lastwords(a, 1)[0] in wdtype:
 		if lastwords(a, 2)[0] in ['a', 'an']:
