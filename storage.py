@@ -24,86 +24,181 @@ def writeindex(strIndex):
 	fileIndex.close()
 
 
-def writeass(s, n):
-	#WORKS. TESTED 02/09/09
-	#Does not fucking work you twat 09/11/09
-	ni = int(n)
-	si = int(s)
-	tf = TemporaryFile(mode='a+')
-	f = openassdic('r')
-	a = f.readlines()
-	c = 0
-	b = 0
-	while b == 0:
-		if int(readnthline(a, c).split(',')[0]) == s:
-			b = 1
-		elif readnthline(a, c).split(',')[0] == '':
-			b = 2
-		c += 1
-	if b == 1:
-		f.seek(0)
-		strng = f.readlines()
-		c1 = 0
-		f.close
-		#Everything before line n
-		while c1 < ni:
-			tf.write(strng[c1])
-			c1 += 1
-		#Insert line n, with added s
-		tf.write(strng[c1].replace('\n',  '') + ',' + s + '\n')
-		c1 += 1
-		#Everything after line n
-		while len(strng) != c1:
-			tf.write(strng[c1])
-			c1 += 1
-		#Write the temp file to assdic.txt
-		tf.seek(0)
-		with open(GLOBALSTORAGE + 'assdic.txt',  'w') as f:
-			f.write(tf.read())
-		tf.close()
-	elif b == 2:
-		f.close()
-		with open(GLOBALSTORAGE + 'assdic.txt',  'a') as f:
-			f.write(s + ',' + n)
-		tf.close
-		tf = TemporaryFile(mode='a+')
-		f = open(GLOBALSTORAGE + 'assdic.txt',  'r')
-		a = f.readlines()
-		c2 = -1
-		b = 0
-		while b <= 0:
-			c2 += 1
-			if int(readnthline(a, c2).split(',')[0]) == n:
-				b = 1
-			elif len(a) == c2:
-				b = 2
-	#Same as above, but for si
-	if b == 1:
-		f.seek(0)
-		strng = f.readlines()
-		c1 = 0
-		f.close
-		#Everything before line s
-		while c1 < si:
-			tf.write(strng[c1])
-			c1 += 1
-		#Insert line s, with added n
-		tf.write(strng[c1].replace('\n',  '') + ',' + str(c2) + '\n')
-		c1 += 1
-		#Everything after line s
-		while len(strng) != c1:
-			tf.write(strng[c1])
-			c1 += 1
-		#Write the temp file to assdic.txt
-		tf.seek(0)
-		with open(GLOBALSTORAGE + 'assdic.txt',  'w') as f:
-			f.write(tf.read())
-		tf.close()
-	elif b == 2:
-		f.close()
-		with open(GLOBALSTORAGE + 'assdic.txt',  'a') as f:
-			f.write(n + ',' + s)
-		tf.close
+def writeass(intIndex1, intIndex2):
+	
+	if intIndex1 > intIndex2:
+		tmp = intIndex1
+		intIndex1 = intIndex2
+		intIndex2 = tmp
+	
+	tempfileFakeDic = TemporaryFile(mode='a+')
+	
+	
+	fileDic = openassdic()
+	listDicCont = fileDic.readlines()
+	fileDic.seek(0)
+	fileDic.close()
+	
+	listDicContClean = []
+	for obCount in listDicCont:
+		listDicContClean.append(obCount.split(','))
+	listDicCont = []
+	
+	intCount1 = 0
+	intCount2 = 0
+	while len(listDicContClean) != intCount1:
+		listDicCont.append([])
+		while len(listDicContClean[intCount1]) != intCount2:
+			listDicCont[intCount1].append(cleanup(listDicContClean[intCount1][intCount2]))
+			intCount2 += 1
+		intCount2 = 0
+		intCount1 += 1
+	
+	
+	if len(listDicCont) < intIndex1:
+		bolIndex1PreExist = False
+	else:
+		bolIndex1PreExist = True
+	
+	if len(listDicCont) < intIndex2:
+		bolIndex2PreExist = False
+	else:
+		bolIndex2PreExist = True
+	
+	if bolIndex1PreExist and bolIndex2PreExist:
+		
+		intCount1 = 0
+		while intCount1 < intIndex1:
+			
+			strLineCont = ''
+			for x in listDicCont[intCount1]:
+				strLineCont = strLineCont + str(x) + ','
+			#Get rid of trailing comma
+			strLineCont = strLineCont[:-1] + '\n'
+			
+			tempfileFakeDic.write(strLineCont)
+			
+			intCount1 += 1
+		
+		strLineCont = ''
+		for x in listDicCont[intCount1]:
+			strLineCont = strLineCont + str(x) + ','
+		strLineCont = strLineCont[:-1]
+		
+		tempfileFakeDic.write(strLineCont + ',' + str(intIndex2) + '\n')
+		
+		intCount1 += 1
+		
+		while intCount1 < intIndex2:
+			
+			strLineCont = ''
+			for x in listDicCont[intCount1]:
+				strLineCont = strLineCont + str(x) + ','
+			strLineCont = strLineCont[:-1] + '\n'
+			
+			tempfileFakeDic.write(strLineCont)
+			
+			intCount1 += 1
+		
+		
+		strLineCont = ''
+		for x in listDicCont[intCount1]:
+			strLineCont = strLineCont + str(x) + ','
+		strLineCont = strLineCont[:-1]
+		
+		tempfileFakeDic.write(strLineCont + ',' + str(intIndex1) + '\n')
+		
+		intCount1 += 1
+		
+		while intCount1 < len(listDicCont):
+			
+			strLineCont = ''
+			for x in listDicCont[intCount1]:
+				strLineCont = strLineCont + str(x) + ','
+			strLineCont = strLineCont[:-1] + '\n'
+			
+			tempfileFakeDic.write(strLineCont)
+			
+			intCount1 += 1
+		
+		tempfileFakeDic.seek(0)
+		with openassdic('w') as fileDic:
+			fileDic.write(tempfileFakeDic.read())
+		tempfileFakeDic.seek(0)
+		tempfileFakeDic.close()
+		
+		return True
+		
+	elif bolIndex2PreExist:
+		
+		intCount1 = 0
+		while intCount1 < intIndex1:
+			
+			strLineCont = ''
+			for x in listDicCont[intCount1]:
+				strLineCont = strLineCont + str(x) + ','
+			#Get rid of trailing comma
+			strLineCont = strLineCont[:-1] + '\n'
+			
+			tempfileFakeDic.write(strLineCont)
+			
+			intCount1 += 1
+		
+		strLineCont = ''
+		for x in listDicCont[intCount1]:
+			strLineCont = strLineCont + str(x) + ','
+		strLineCont = strLineCont[:-1]
+		
+		tempfileFakeDic.write(strLineCont + ',' + str(intIndex2) + '\n')
+		
+		intCount1 += 1
+		
+		while intCount1 < len(listDicCont):
+			
+			strLineCont = ''
+			for x in listDicCont[intCount1]:
+				strLineCont = strLineCont + str(x) + ','
+			strLineCont = strLineCont[:-1] + '\n'
+			
+			tempfileFakeDic.write(strLineCont)
+			
+			intCount1 += 1
+		
+		tempfileFakeDic.write(str(intIndex2) + ',' + str(intIndex1) + '\n')
+		
+		tempfileFakeDic.seek(0)
+		with openassdic('w') as fileDic:
+			fileDic.write(tempfileFakeDic.read())
+		tempfileFakeDic.seek(0)
+		tempfileFakeDic.close()
+		
+		return True
+		
+	elif not bolIndex1PreExist and not bolIndex2PreExist:
+		
+		intCount1 = 0
+		
+		while intCount1 < len(listDicCont):
+			
+			strLineCont = ''
+			for x in listDicCont[intCount1]:
+				strLineCont = strLineCont + str(x) + ','
+			strLineCont = strLineCont[:-1] + '\n'
+			
+			tempfileFakeDic.write(strLineCont)
+			
+			intCount1 += 1
+		
+		tempfileFakeDic.write(str(intIndex2) + ',' + str(intIndex1) + '\n')
+		tempfileFakeDic.write(str(intIndex1) + ',' + str(intIndex2) + '\n')
+		
+		tempfileFakeDic.seek(0)
+		with openassdic('w') as fileDic:
+			fileDic.write(tempfileFakeDic.read())
+		tempfileFakeDic.seek(0)
+		tempfileFakeDic.close()
+		
+		return True
 
 
 def checkass(intIndex1, intIndex2):

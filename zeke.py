@@ -9,7 +9,7 @@ from sys import *
 path = [GLOBALLIB] + path
 
 #Debug area
-writeindex('cheese')
+writeass(4, 1)
 
 c = 0
 c1 = 0
