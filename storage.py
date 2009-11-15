@@ -279,38 +279,54 @@ def getass(intIndex):
 	return listintReturn
 
 
-checkindex = lambda intstrInput: True if not getindex(intstrInput) else False
+checkindex = lambda intstrInput: True if type(getindex(intstrInput)) != type(True) else False
 
-def getindex(s):
-	'''Gets the index number of a string. If found return index number, else return False. Syntax: pollassindex(string)'''
-	#WORKS. TESTED 01/09/09
-	#Does not 09/11/09
-	#Changed to take string or int input, and return string or int out. changed name to getindex from pollassindex 10/11/09
-	if s == str(s):
-		c = 0
-		d = ''
-		f = open(GLOBALSTORAGE + 'assindex.txt')
-		a = f.readlines()
-		while d == '':
-			if len(a) != c and s == readnthline(a, c).split(',')[1]:
-				d = c
-			elif len(a) == c:
-				d = False
-			c += 1
-		f.close()
-		return d
+def getindex(unkInput):
+	
+	fileIndex = openassindex()
+	listIndexCont = fileIndex.readlines()
+	fileIndex.seek(0)
+	fileIndex.close()
+	
+	listIndexContClean = []
+	for obCount in listIndexCont:
+		listIndexContClean.append(obCount.split(','))
+	listIndexCont = []
+	
+	intCount1 = 0
+	intCount2 = 0
+	while len(listIndexContClean) != intCount1:
+		listIndexCont.append([])
+		while len(listIndexContClean[intCount1]) != intCount2:
+			listIndexCont[intCount1].append(cleanup(listIndexContClean[intCount1][intCount2]))
+			intCount2 += 1
+		intCount2 = 0
+		intCount1 += 1
+	
+	if unkInput == str(unkInput):
+		strInput = unkInput
+		intCount = 0
+		Answer = ''
+		while Answer == '':
+			if len(listIndexCont) != intCount and strInput == listIndexCont[intCount][1]:
+				Answer = intCount
+			elif len(listIndexCont) == intCount:
+				Answer = False
+			intCount += 1
+	
 	else:
-		with open(GLOBALSTORAGE + 'assindex.txt') as f:
-			a = f.readlines()
-			d = []
-			c = 0
-			while d == []:
-				if len(a) != c and s == int(readnthline(a, c).split(',')[0]):
-					d = readnthline(a, c).split(',')[1]
-				elif len(a) == c:
-					d = False
-				c += 1
-		return d
+		unkInput = intInput
+		Answer = []
+		intCount = 0
+		while Answer == []:
+			if len(listIndexCont) != intCount and intInput == listIndexCont[intCount][0]:
+				Answer = listIndexCont[intCount][1]
+			elif len(listIndexCont) == intCount:
+				Answer = False
+			intCount += 1
+	
+	return Answer
+
 
 
 def pollassindexrev(s):

@@ -9,7 +9,7 @@ from sys import *
 path = [GLOBALLIB] + path
 
 #Debug area
-writeass(4, 1)
+getindex('chedder')
 
 c = 0
 c1 = 0
@@ -42,10 +42,13 @@ while c1 < 20:
 		asses = []
 		tm = raw_input('What word would you like the acociations for? ')
 		tmindex = getindex(tm)
-		tmasses = getass(tmindex)
-		print '%s is assosiated with:' % tm
-		for x in tmasses:
-			print getindex(x)
+		if not tmindex:
+			print '%s is not associated with anything' % tm
+		else:
+			tmasses = getass(tmindex)
+			print '%s is assosiated with:' % tm
+			for x in tmasses:
+				print getindex(x)
 	elif len(a.split(' ')) < 3:
 		exit('A question you numscull')
 	elif lastletter(a) and ass1 == '':
@@ -81,17 +84,17 @@ while c1 < 20:
 				writeass(getindex(ass1), getindex(ass2))
 		
 		ass1, ass2 = '', ''
-	if not lastwords(a, 1)[0] in wdtype:
+	if not a in ['ass', 'wdtype'] and not lastwords(a, 1)[0] in wdtype:
 		if lastwords(a, 2)[0] in ['a', 'an']:
 			wdtype[lastwords(a, 1)[0]] = wdtypen
 		else:
 			wdtype[lastwords(a, 1)[0]] = wdtypea
-	if not firstwords(a, 2)[1] in wdtype:
+	if not a in ['ass', 'wdtype'] and not firstwords(a, 2)[1] in wdtype:
 		wdtype[firstwords(a, 2)[1]] = wdtypep
 	#Actualy respond
-	if lastletter(a):
+	if not a in ['ass', 'wdtype'] and lastletter(a) :
 		print 'Yes'
-	else:
+	elif not a in ['ass', 'wdtype']:
 		print 'No'
 	c1 += 1
 
