@@ -28,9 +28,9 @@ def writeindex(strIndex):
 
 def writeass(intIndex1, intIndex2):
 	
-	if intIndex1 > intIndex2:
-		tmp = intIndex1
-		intIndex1 = intIndex2
+	if intIndex1 < intIndex2:
+		tmp = intIndex2
+		intIndex2 = intIndex1
 		intIndex2 = tmp
 	
 	tempfileFakeDic = TemporaryFile(mode='a+')
@@ -191,8 +191,8 @@ def writeass(intIndex1, intIndex2):
 			
 			intCount1 += 1
 		
-		tempfileFakeDic.write(str(intIndex2) + ',' + str(intIndex1) + '\n')
 		tempfileFakeDic.write(str(intIndex1) + ',' + str(intIndex2) + '\n')
+		tempfileFakeDic.write(str(intIndex2) + ',' + str(intIndex1) + '\n')
 		
 		tempfileFakeDic.seek(0)
 		with openassdic('w') as fileDic:
@@ -323,11 +323,12 @@ def getindex(unkInput):
 			intCount += 1
 	
 	else:
-		unkInput = intInput
+		#change it to string because thats how it's stored
+		strInput = str(unkInput)
 		Answer = []
 		intCount = 0
 		while Answer == []:
-			if len(listIndexCont) != intCount and intInput == listIndexCont[intCount][0]:
+			if len(listIndexCont) != intCount and strInput == listIndexCont[intCount][0]:
 				Answer = listIndexCont[intCount][1]
 			elif len(listIndexCont) == intCount:
 				Answer = False

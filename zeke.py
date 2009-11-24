@@ -9,8 +9,8 @@ from sys import *
 path = [GLOBALLIB] + path
 
 #Debug area
-a = writeass(getindex('tree'),getindex('chedder'))
-print a
+#a = writeass(8, 9)
+#print a
 
 c = 0
 c1 = 0
@@ -43,7 +43,7 @@ while c1 < 20:
 		asses = []
 		tm = raw_input('What word would you like the acociations for? ')
 		tmindex = getindex(tm)
-		if not tmindex:
+		if str(tmindex) == 'False':
 			print '%s is not associated with anything' % tm
 		else:
 			tmasses = getass(tmindex)
