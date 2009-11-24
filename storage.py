@@ -57,12 +57,12 @@ def writeass(intIndex1, intIndex2):
 		intCount1 += 1
 	
 	
-	if len(listDicCont) < intIndex1:
+	if len(listDicCont) - 1 < intIndex1:
 		bolIndex1PreExist = False
 	else:
 		bolIndex1PreExist = True
 	
-	if len(listDicCont) < intIndex2:
+	if len(listDicCont) - 1 < intIndex2:
 		bolIndex2PreExist = False
 	else:
 		bolIndex2PreExist = True
@@ -229,13 +229,21 @@ def checkass(intIndex1, intIndex2):
 		intCount1 += 1
 	
 	bolResult1 = False
-	if strIndex2 in listDicCont[intIndex1][1:]:
+	try:
+		strIndex2 in listDicCont[intIndex1][1:]
+	except IndexError:
+		return False
+	else:
 		bolResult1 = True
 	
 	bolResult2 = False
-	if strIndex1 in listDicCont[intIndex2][1:]:
+	try:
+		strIndex1 in listDicCont[intIndex2][1:]
+	except IndexError:
+		return False
+	else:
 		bolResult2 = True
-	
+		
 	if bolResult1 and bolResult2:
 		return True
 	else:

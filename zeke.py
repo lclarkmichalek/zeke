@@ -9,7 +9,8 @@ from sys import *
 path = [GLOBALLIB] + path
 
 #Debug area
-getindex('chedder')
+a = writeass(getindex('tree'),getindex('chedder'))
+print a
 
 c = 0
 c1 = 0
