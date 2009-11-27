@@ -3,6 +3,7 @@
 
 from tempfile import *
 from zekemods import *
+import pickle
 
 declareglobs()
 
@@ -281,6 +282,8 @@ def getass(intIndex):
 		listReturn = listDicCont[intIndex][1:]
 	
 	listintReturn = []
+	if not listReturn:
+		return False
 	for x in listReturn:
 		listintReturn.append(int(x))
 	
@@ -401,29 +404,15 @@ def openassdic(*args):
 
 
 #SOME POINT USE PICKLE SEE ISSUE 8
-def writedic(s,n):
-    c = 0
-    f = open(GLOBALSTORAGE + n + 'dic.txt')
-    pre = f.read()
-    f.close()
-    pre = pre.split(' ')
-    while c < len(s.keys()):
-        if not s.keys()[c] in pre:
-            f = open(n + 'dic.txt', 'a')
-            f.write(' ' + s.keys()[c] + ' ' + s.values()[c])
-            f.close()
-        c += 1
-    return
+def writewdtype(dicWrite):
+	with open(GLOBALSTORAGE + 'wdtypedic.txt', 'w') as fileWdtype:
+		pickle.dump(dicWrite, fileWdtype)
 
-def getdic(s):
-    dic = {}
-    c = 0
-    f = open(GLOBALSTORAGE + s + 'dic.txt')
-    dicf = f.read()
-    f.close()
-    dicf = dicf.split(' ')
-    while c < len(dicf):
-        dic[dicf[c]] = dicf[c + 1]
-        c += 2
-    return dic
-
+def getwdtype():
+	with open(GLOBALSTORAGE + 'wdtypedic.txt') as fileWdtype:
+		if len(fileWdtype.read()) == 0:
+			dicAnswer = {}
+		else:
+			fileWdtype.seek(0)
+			dicAnswer = pickle.load(fileWdtype)
+	return dicAnswer

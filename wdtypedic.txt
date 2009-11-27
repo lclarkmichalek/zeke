@@ -1,1 +1,26 @@
-green adjective it pronoun she pronoun nice adjective hot adjective he pronoun noob noun that pronoun i pronoun vowels adjective you pronoun fly adjective
+(dp0
+Vblue
+p1
+S'adjective'
+p2
+sVswim
+p3
+S'adjective'
+p4
+sVthem
+p5
+S'adjective'
+p6
+sVit
+p7
+S'pronoun'
+p8
+sVwhale
+p9
+S'noun'
+p10
+sVSally
+p11
+S'name'
+p12
+s.
