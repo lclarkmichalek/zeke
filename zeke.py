@@ -8,9 +8,8 @@ from storage import *
 from sys import *
 path = [GLOBALLIB] + path
 
-#Debug area
-#a = writeass(8, 9)
-#print a
+
+dicAssIndex = getAssIndex()
 
 c = 0
 c1 = 0
@@ -45,15 +44,17 @@ while c1 < 20:
 		c2 = 0
 		asses = []
 		tm = raw_input('What word would you like the acociations for? ')
-		tmindex = getindex(tm)
-		if str(tmindex) == 'False':
-			print '%s is not associated with anything' % tm
-		else:
+		if tm in dicAssIndex.keys():
+			tmindex = dicAssIndex[tm]
 			tmasses = getass(tmindex)
 			print '%s is assosiated with:' % tm
 			for x in tmasses:
-				print getindex(x)
+				print dicAssIndex[x]
+		else:
+			print '%s is not associated with anything' % tm
 				
+		
+		
 	elif a == 'edit':
 		strEditChoice = raw_input('What would you like to edit? Word types, or Word associations? ')
 		
@@ -107,44 +108,48 @@ while c1 < 20:
 					writeindex(strNewAss)
 				writeass(getindex(strNewAss), tmindex)
 				print 'Done'
+				
+				
 	elif len(a.split(' ')) < 3:
 		exit('A question you numscull')
 		
 	elif lastletter(a) and ass1 == '':
 		ass1 = lastwords(a, 1)[0]
 		
-	elif not lastletter(a) and ass1 != '':
+	elif ass1 != '':
 		ass2 = lastwords(a, 1)[0]
 		
 	if not '' in (ass1, ass2):
-		if checkindex(ass1) and checkindex(ass2):
+		if ass1 in dicAssIndex.keys() and ass2 in dicAssIndex.keys():
 			
-			if not checkass(getindex(ass1), getindex(ass2)):
-				writeass(getindex(ass1), getindex(ass2))
+			if not checkass(dicAssIndex[ass1], dicAssIndex[ass2]):
+				writeass(dicAssIndex[ass1], dicAssIndex[ass2])
 			
-		elif not checkindex(ass1) and not checkindex(ass2):
+		elif not ass1 in dicAssIndex.keys() and ass2 in dicAssIndex.keys():
 			
-			writeindex(ass1)
-			writeindex(ass2)
+			dicAssIndex[ass1] = len(dicAssIndex)
 			
-			if not checkass(getindex(ass1), getindex(ass2)):
-				writeass(getindex(ass1), getindex(ass2))
+			if not checkass(dicAssIndex[ass1], dicAssIndex[ass2]):
+				writeass(dicAssIndex[ass1], dicAssIndex[ass2])
+			
+		elif not ass2 in dicAssIndex.keys() and ass1 in dicAssIndex.keys():
+			
+			dicAssIndex[ass2] = len(dicAssIndex)
+			
+			if not checkass(dicAssIndex[ass1], dicAssIndex[ass2]):
+				writeass(dicAssIndex[ass1], dicAssIndex[ass2])
 				
-		elif not checkindex(ass1):
+		elif not ass1 in dicAssIndex.keys() and not ass2 in dicAssIndex.keys():
 			
-			writeindex(ass1)
+			dicAssIndex[ass1] = len(dicAssIndex)
+			dicAssIndex[ass2] = len(dicAssIndex)
 			
-			if not checkass(getindex(ass1), getindex(ass2)):
-				writeass(getindex(ass1), getindex(ass2))
-			
-		elif not checkindex(ass2):
-			
-			writeindex(ass2)
-			
-			if not checkass(getindex(ass1), getindex(ass2)):
-				writeass(getindex(ass1), getindex(ass2))
+			if not checkass(dicAssIndex[ass1], dicAssIndex[ass2]):
+				writeass(dicAssIndex[ass1], dicAssIndex[ass2])
+				
 		
 		ass1, ass2 = '', ''
+		writeAssIndex(dicAssIndex)
 		
 	if not a in listKeywords and not lastwords(a, 1)[0] in wdtype:
 		
