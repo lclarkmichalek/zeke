@@ -1,10 +1,10 @@
 #!/bin/python
 
-import anydbm
+import shelve
 from random import randint
 
 global db
-db = anydbm.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/words', 'c')
+db = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/words')
 
 #########################################
 #          CLASSES                      #
@@ -60,6 +60,11 @@ class Super(object):
 		
 
 class Word(Super):
+	
+	type = None
+	use = None
+	status = None
+	
 	def __add__(self, other):
 		#May seem big, but only need one, words are special
 		if type(other) == type(Word()):
@@ -80,8 +85,8 @@ class Word(Super):
 				other.words.append(self.data)
 				self.use = other.data
 		elif type(other) == type(Status()):
-			if self.data:
-				raise StatusDefined(self.data, self.data)
+			if self.status:
+				raise StatusDefined(self.status, self.data)
 			else:
 				other.words.append(self.data)
 				self.status = other.data
@@ -98,7 +103,11 @@ class Use(Super):
 	def __div__(self, other):
 		self._UseDiv(other)
 
-class Status(Super): pass
+class Status(Super):
+	def __init__(self, data=None, start=5, end=5):
+		Super.__init__(self, data)
+		
+		self.range = range(start, end + 1)
 
 #########################################
 #            FUNCTIONS                  #
@@ -107,9 +116,14 @@ class Status(Super): pass
 def getword(status, type, use):
 	for word in use:
 		word = db[word]
-		if word.type == type and word.status == status:
-			return word
-		elif word.type == type:
+		if word.type == type:
+			Status = db[word.status]
+			if status in Status.range:
+				return word
+	#If they get this far, skip status bit
+	for word in use:
+		word = db[word]
+		if word.type == type:
 			return word
 
 #########################################

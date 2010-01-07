@@ -14,6 +14,7 @@ has WORDS
 
 STATUS
 has WORDS
+has value 0-10
 
 -----------------------
 
