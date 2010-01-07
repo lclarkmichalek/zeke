@@ -1,9 +1,14 @@
 #!/bin/python
 
 import anydbm
+from random import randint
 
 global db
 db = anydbm.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/words', 'c')
+
+#########################################
+#          CLASSES                      #
+#########################################
 
 class Super(object):
 	def __init__(self, data=None):
@@ -52,43 +57,34 @@ class Super(object):
 				if x.use == other: ret.append(x.data)
 				del x
 			return ret
-	def _TypeDiv(self, other): pass
 		
 
 class Word(Super):
-	def __init__(self, word=None):
-		#for iters
-		self.place = -1
-		
-		self.data = word
-		
-		#asses = list of words
-		self.asses = []
-	
 	def __add__(self, other):
+		#May seem big, but only need one, words are special
 		if type(other) == type(Word()):
-			if other.data in self.asses:
+			if other.data in self.words:
 				return None
-			self.asses.append(other.data)
-			other.asses.append(self.data)
+			self.words.append(other.data)
+			other.words.append(self.data)
 		elif type(other) == type(Type()):
-			if other.type:
-				raise TypeDefined(other.data, other.type)
+			if self.type:
+				raise TypeDefined(self.data, self.type)
 			else:
-				self.words.append(other.data)
-				other.type = self.type
+				other.words.append(self.data)
+				self.type = other.data
 		elif type(other) == type(Use()):
-			if other.use:
-				raise UseDefined(other.data, other.use)
+			if self.use:
+				raise UseDefined(self.data, self.use)
 			else:
-				self.words.append(other.data)
-				other.use = self.use
+				other.words.append(self.data)
+				self.use = other.data
 		elif type(other) == type(Status()):
-			if other.data:
-				raise StatusDefined(other.data, other.data)
+			if self.data:
+				raise StatusDefined(self.data, self.data)
 			else:
-				self.words.append(other.data)
-				other.data = self.use
+				other.words.append(self.data)
+				self.status = other.data
 
 
 class Type(Super):
@@ -101,6 +97,24 @@ class Type(Super):
 class Use(Super):
 	def __div__(self, other):
 		self._UseDiv(other)
+
+class Status(Super): pass
+
+#########################################
+#            FUNCTIONS                  #
+#########################################
+
+def getword(status, type, use):
+	for word in use:
+		word = db[word]
+		if word.type == type and word.status == status:
+			return word
+		elif word.type == type:
+			return word
+
+#########################################
+#          EXCEPTIONS                   #
+#########################################
 
 class OwnErrors(Exception): pass
 
