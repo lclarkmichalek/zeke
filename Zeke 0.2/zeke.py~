@@ -1,0 +1,119 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from random import *
+from zekemods import *
+declareglobs()
+from storage import *
+from sys import *
+path = [GLOBALLIB] + path
+
+c = 0
+c1 = 0
+t = 0
+v1 = 0
+v2 = 0
+a = ''
+ass1 = ''
+ass2 = ''
+wdtype = getdic('wdtype')
+wdtypen = 'noun'
+wdtypep = 'pronoun'
+wdtypea = 'adjective'
+wdtypev = 'verb'
+queswds = ['who', 'how', 'why', 'where', 'when', 'what', 'which']
+while c1 < 20:
+	if c == 1 and t == 1:
+            ass1 = lastwords(a, 1)[0]
+	elif c == 2:
+		ass2 = lastwords(a, 1)[0]
+	if checkass(ass1, ass2) in [1, 2, 3, 5]:
+        #If one or more is found not to exist, or they aint accosiated, do it through the ubiquotus writeassindex func
+		writeassdic(writeassindex(ass1), writeassindex(ass2))
+        c = 0
+	if v2 == 0 and c1 != 0 and not lastwords(a, 1)[0] in wdtype:
+		if lastwords(a, 2)[0] in ['a', 'an']:
+			wdtype[lastwords(a, 1)[0]] = wdtypen
+		else:
+			wdtype[lastwords(a, 1)[0]] = wdtypea
+	if v2 == 0 and c1 > 0 and not firstwords(a, 2)[1] in wdtype:
+		wdtype[firstwords(a, 2)[1]] = wdtypep
+		v2 = 0
+	a = raw_input('I am thinking of an object. Ask me a yes/no question about it. ')
+	if a == '':
+		exit('Next time, enter something')
+	a = rmpunc(a)[0]
+	if a == 'stop' or a == 'Stop':
+		writedic(wdtype,'wdtype')
+		exit()
+	elif a == 'wdtype':
+		t = 2
+		v2 = 1
+		print wdtype
+	elif a == 'ass':
+		c2 = 0
+		tm = raw_input('What word would you like the acociations for? ')
+		pollassdic(pollassindex(tm))
+		t = 2
+		v2 = 1
+	elif len(a.split(' ')) < 3:
+		exit('A question you numscull')
+	elif lastletter(a):
+		print 'Yes'
+		if c == 0:
+			c = 1
+			t = 1
+		else:
+			c = 2
+			t = 1
+			v1 = 1
+	else:
+		print 'No'
+	if v1 == 1:
+        	if c == 0:
+			c = 1	
+		else:
+			c = 2
+		t = 1
+	else:
+		t = 2
+	c1 += 1
+
+
+writedic(wdtype,'wdtype')
+
+while True:
+	a = raw_input('Ok, I\'m sorry, there was no object. I\' still learning about the world. Can you help me? ')
+	a = rmpunc(a)[0]
+	if a != 'no':
+		print 'I\'ll take that as a yes'
+		break
+	else:
+		exit('Ok then')
+
+        
+while True:
+	a = raw_input('Tell me something, and I will try and respond. ')
+	a = rmpunc(a)[0]
+	if firstwords(a, 1)[0] in queswds:
+		exit('Trechery on all frontiers, I asked for a statment')
+	elif wdtype[firstwords(a, 1)[1]] == wdtypep:
+		tmpvar = raw_imput('Is ' + firstwords(a, 1)[1] + ' the variable? ')
+		if tmpvar == 'yes':
+			wdtype[firstwords(a, 1)][1] = wdtypep
+	if lastwords(a, 1)[0] in wdtype or lastwords(a, 1)[0] in ass:
+		q = queswds[randrange(0, len(queswds))]
+		if wdtype[lastwords(a, 1)[0]] == wdtypea:
+			wdtype[firstwords(a, 1)[1]] = wdtypev
+        elif wdtype[firstword(a, 2)[1]] == wdtypen:
+            if not firstword(a, 0)[0] in wdtype:
+                wdtype[firstword(a, 0)[0]] = wdtypep
+            if not firstword(a, 2)[1] in wdtype:
+                wdtype[firstword(a, 2)[1]] = wdtypev
+                
+	
+	
+	
+	
+	else:
+		print 'I\' sorry, I havn\' a clue'
