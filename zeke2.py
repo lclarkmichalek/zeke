@@ -93,12 +93,14 @@ class Word(Super):
 
 class Type(Super):
 	def __div__(self, other):
-		a = Super._StatusDiv(self, other)
+		a = self._StatusDiv(other)
 		if not a:
-			a = Super._UseDiv(self, other)
+			a = self._UseDiv(other)
 		return a
 
-class Use(Super): pass
+class Use(Super):
+	def __div__(self, other):
+		self._UseDiv(other)
 
 class OwnErrors(Exception): pass
 
