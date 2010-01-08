@@ -114,17 +114,21 @@ class Status(Super):
 #########################################
 
 def getword(status, type, use):
+	ret = []
 	for word in use:
 		word = db[word]
 		if word.type == type:
 			Status = db[word.status]
 			if status in Status.range:
-				return word
+				ret.append(word)
 	#If they get this far, skip status bit
-	for word in use:
-		word = db[word]
-		if word.type == type:
-			return word
+	if not ret:
+		for word in use:
+			word = db[word]
+			if word.type == type:
+				ret.append(word)
+	#Now choose a random word
+	return ret[randint(0,len(ret))]
 
 #########################################
 #          EXCEPTIONS                   #
