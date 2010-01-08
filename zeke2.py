@@ -6,6 +6,9 @@ from random import randint
 global db
 db = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/words')
 
+global config
+config = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/config')
+
 #########################################
 #          CLASSES                      #
 #########################################
@@ -38,6 +41,9 @@ class Super(object):
 			raise StopIteration
 		self.place += 1
 		return self.words[self.place]
+	
+	def __len__(self):
+		return len(self.words)
 	
 	def _StatusDiv(self, other):
 		if type(other) == type(Status()):
@@ -118,8 +124,8 @@ def getword(status, type, use):
 	for word in use:
 		word = db[word]
 		if word.type == type:
-			Status = db[word.status]
-			if status in Status.range:
+			status1 = db[word.status]
+			if status in status1.range:
 				ret.append(word)
 	#If they get this far, skip status bit
 	if not ret:
