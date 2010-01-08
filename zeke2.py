@@ -15,6 +15,7 @@ uses = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/uses.s
 global statuses
 statuses = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/statuses.slv')
 
+#Some other thingys that I want to keep
 global persistence
 persistence = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/persistence.slv')
 
@@ -143,7 +144,24 @@ def getword(status, type, use):
 			if word.type == type:
 				ret.append(word)
 	#Now choose a random word
-	return ret[randint(0,len(ret))]
+	return ret[randint(0,len(ret) - 1)]
+
+def exist(word):
+	'''See if the word exists. Return True or False'''
+	try:
+		words[word]
+	except KeyError:
+		return False
+	else:
+		return True
+
+def findstatus(number):
+	'''Find statuses that have number in their range'''
+	ret = []
+	for status in statuses:
+		if number in status.range:
+			ret.append(status.data)
+	return ret
 
 #########################################
 #          EXCEPTIONS                   #
@@ -174,4 +192,18 @@ class Forbidden(WordErrors):
 		print 'Please don\'t set %s manualy.' % attr
 
 if __name__ == '__main__':
-	pass
+	print getword(statuses[persistence[status]], types[greeting], uses[greeting])
+	input = raw_input()
+	#Use whole input, not input.split(), because a relpy to greeting is useualy greeting phrase/word
+	if exist(input):
+		a = words[input] + types[greeting]
+		a = words[input] + uses[greeting] 
+		if persistence[status] < 5:
+			a = findstatus(persistence[status])
+			a = words[input] + statuses[a[randint(0, len(a) - 1)]]
+		else:
+			#Inverse. example, butler: Good morning sir
+			#Person: Morning Jeeves
+			#Buter: Formal, Person: Informal
+			a = findstatus(10 - persistence[status])
+			a = words[input] + statuses[a[randint(0, len(a) - 1)]]
