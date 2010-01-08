@@ -3,11 +3,20 @@
 import shelve
 from random import randint
 
-global db
-db = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/words')
+global words
+words = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/words.slv')
 
-global config
-config = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/config')
+global types
+types = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/types.slv')
+
+global uses
+uses = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/uses.slv')
+
+global statuses
+statuses = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/statuses.slv')
+
+global persistence
+persistence = shelve.open('/home/laurie/PersonalMedia/Code/Python/Zeke/Maintrunk/persistence.slv')
 
 #########################################
 #          CLASSES                      #
@@ -43,7 +52,7 @@ class Super(object):
 		return self.words[self.place]
 	
 	def __len__(self):
-		return len(self.words)
+		return len(self.wordss)
 	
 	def _StatusDiv(self, other):
 		if type(other) == type(Status()):
